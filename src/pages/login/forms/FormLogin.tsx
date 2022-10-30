@@ -1,6 +1,6 @@
 import { clientController } from "../../../controllers/client/ClientController";
-import { Form } from "./Form";
+import { Button } from "@revoltchat/ui";
 
 export function FormLogin() {
-    return <Form page="login" callback={clientController.login} />;
+    return <Button onClick={clientController.login}>Login (HORAHORA BAD SSO)</Button>;
 }

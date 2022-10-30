@@ -180,36 +180,8 @@ class ClientController {
      * @param credentials Credentials
      */
     async login(credentials: API.DataLogin) {
-        const browser = detect();
-
-        // Generate a friendly name for this browser
-        let friendly_name;
-        if (browser) {
-            let { name } = browser;
-            const { os } = browser;
-            let isiPad;
-            if (window.isNative) {
-                friendly_name = `Revolt Desktop on ${os}`;
-            } else {
-                if (name === "ios") {
-                    name = "safari";
-                } else if (name === "fxios") {
-                    name = "firefox";
-                } else if (name === "crios") {
-                    name = "chrome";
-                }
-                if (os === "Mac OS" && navigator.maxTouchPoints > 0)
-                    isiPad = true;
-                friendly_name = `${name} on ${isiPad ? "iPadOS" : os}`;
-            }
-        } else {
-            friendly_name = "Unknown Device";
-        }
-
         // Try to login with given credentials
         let session = await this.apiClient.api.post("/auth/session/login", {
-            ...credentials,
-            friendly_name,
         });
 
         // Prompt for MFA verificaiton if necessary

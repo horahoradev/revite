@@ -50,21 +50,6 @@ export default observer(() => {
                             &middot; App: <code>{APP_VERSION}</code>
                         </div>*/}
                         <Switch>
-                            <Route path="/login/create">
-                                <FormCreate />
-                            </Route>
-                            <Route path="/login/resend">
-                                <FormResend />
-                            </Route>
-                            <Route path="/login/verify/:token">
-                                <FormVerify />
-                            </Route>
-                            <Route path="/login/reset/:token">
-                                <FormReset />
-                            </Route>
-                            <Route path="/login/reset">
-                                <FormSendReset />
-                            </Route>
                             <Route path="/">
                                 <FormLogin />
                             </Route>
