@@ -1,4 +1,4 @@
-This is a fork of [Revite](https://github.com/revoltchat/revite) that I've ~~butchered~~modified to suit Horahora's needs. Credit for developing the original software goes to the [many contributors](https://github.com/revoltchat/revite/graphs/contributors), most notably [insertish](https://github.com/insertish). If you have any questions or concerns about what I've done, you may contact me at Otoman#6721 on Discord, [my email](horahora1567@gmail.com) or anywhere else you happen to find me. Thank you for your work!
+This is a fork of [Revite](https://github.com/revoltchat/revite) that I've ~~butchered~~modified to suit Horahora's needs. Credit for developing the original software goes to the [many contributors](https://github.com/revoltchat/revite/graphs/contributors), most notably [insertish](https://github.com/insertish). If you have any questions or concerns about what I've done, you may contact me at Otoman#6721 on Discord, my email (horahora1567@gmail.com) or anywhere else you happen to find me. Thank you for your work!
 
 My changes are summarized below:
 
