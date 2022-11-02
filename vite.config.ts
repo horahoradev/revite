@@ -43,6 +43,7 @@ function getVersion() {
 }
 
 export default defineConfig({
+    base:  "http://localhost/chat",
     plugins: [
         preact(),
         macrosPlugin(),
