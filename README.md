@@ -8,6 +8,11 @@ My changes are summarized below:
 - removed typecheck and port exposure from Dockerfile
 - modified this README to provide attribution and comply with the terms of the license
 
+### 11-1-22:
+- modified .env file to use my local API
+- modified Dockerfile for hot reloads (development use)
+- modified vite config to accommodate my path setup in Nginx
+
 # Revite
 
 ## Description
