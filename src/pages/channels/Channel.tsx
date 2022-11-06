@@ -26,6 +26,7 @@ import { PageHeader } from "../../components/ui/Header";
 import { useClient } from "../../controllers/client/ClientController";
 import ChannelHeader from "./ChannelHeader";
 import { MessageArea } from "./messaging/MessageArea";
+import { WatchParty } from "./messaging/WatchParty";
 import VoiceHeader from "./voice/VoiceHeader";
 
 const ChannelMain = styled.div.attrs({ "data-component": "channel" })`
@@ -193,6 +194,7 @@ const TextChannel = observer(({ channel }: { channel: ChannelI }) => {
                     <ChannelContent>
                         <VoiceHeader id={channel._id} />
                         <NewMessages channel={channel} last_id={lastId} />
+                        <WatchParty channel={channel} last_id={lastId} />
                         <MessageArea channel={channel} last_id={lastId} />
                         <TypingIndicator channel={channel} />
                         <JumpToBottom channel={channel} />

@@ -30,13 +30,14 @@ import ConversationStart from "./ConversationStart";
 import MessageRenderer from "./MessageRenderer";
 
 const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
-    height: 100%;
     flex-grow: 1;
     min-height: 0;
     word-break: break-word;
 
     overflow-x: hidden;
     overflow-y: scroll;
+    border-top: 3px;
+    margin-top: 26px;
 
     &::-webkit-scrollbar-thumb {
         min-height: 150px;
@@ -44,7 +45,6 @@ const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
 
     > div {
         display: flex;
-        min-height: 100%;
         padding-bottom: 26px;
         flex-direction: column;
         justify-content: flex-end;

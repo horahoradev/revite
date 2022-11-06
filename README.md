@@ -13,6 +13,12 @@ My changes are summarized below:
 - modified Dockerfile for hot reloads (development use)
 - modified vite config to accommodate my path setup in Nginx
 
+### 11-6-22:
+- added functions representing Horahora's planned REST API for watch parties. These functions currently return placeholder data to test component display.
+- added "WatchParty" component which currently only implements the basic display for planned channel watch party functionality
+- added use of the "WatchParty" component to the standard TextChannel
+- changed MessageArea CSS to make room for the new WatchParty component within the text channel
+
 # Revite
 
 ## Description
