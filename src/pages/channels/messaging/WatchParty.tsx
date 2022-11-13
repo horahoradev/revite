@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import { runInAction } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useHistory, useParams } from "react-router-dom";
@@ -20,7 +21,7 @@ import { Preloader } from "@revoltchat/ui";
 
 import { defer } from "../../../lib/defer";
 import { internalEmit, internalSubscribe } from "../../../lib/eventEmitter";
-import { GetPartyState, Video, User } from "../../../lib/horahora/api";
+import { GetPartyState, CreateWatchParty, Video, User, JoinParty } from "../../../lib/horahora/api";
 import { getRenderer } from "../../../lib/renderer/Singleton";
 import { ScrollState } from "../../../lib/renderer/types";
 
@@ -83,20 +84,44 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
     const [videos, setVideos] = useState<Video[]>([]);
     const [users, setUsers] = useState<User[]>([]);
 
+
+            // playing it fast and loose
+            // LMFAO
+            // FIXME
+            const encoder = new TextEncoder();
+            const byteArr = encoder.encode(channel._id);
+            const buf = Buffer.from(byteArr);
+            const idNum = buf.readUIntBE(0, byteArr.length) % 1000;
+
+
     useEffect(() => {
         const cb = async function () {
-            const state = await GetPartyState(1);
-            setVideos(state.Videos);
-            setUsers(state.Users);
+            // I'll need to fix this later
+            let state = await GetPartyState(BigInt(idNum));
+
+            if (state.Videos == undefined || state.Users == undefined || state.Videos.length == 0 && state.Users.length == 0) {
+                await CreateWatchParty(idNum);
+                await JoinParty(idNum);
+                state = await GetPartyState(BigInt(idNum));
+            } else {
+                await JoinParty(idNum);
+                state = await GetPartyState(BigInt(idNum));
+            }
+            if (state.Videos != undefined){
+                setVideos(state.Videos);
+            }
+            if (state.Users != undefined) {
+                setUsers(state.Users);
+            }
         };
         cb();
-    }, []);
+    }, [channel]);
 
     const videoItems = videos.map((video) => <li>{video.Title}</li>);
 
     const userItems = users.map((user) => (
         <li>
-            {user.IsLeader ? <b>{`${user.Name} (party leader)`}</b> : user.Name}
+            {user.IsLeader ? <b>{`${user.UserID} (party leader)`}</b> : user.UserID}
         </li>
     ));
 
@@ -105,14 +130,14 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
             <VideoList>
                 <h2>Video Queue</h2>
                 <List>{videoItems}</List>
+                <form action={`/api/addvideo/${idNum}`} method="post">
+                    Video name: <input type="text" id="VideoURL" name="VideoURL"/>
+                    <input type="submit" value="Submit" />
+                </form>
             </VideoList>
             <div>
-                <Player controls>
-                    <source
-                        src="https://f002.backblazeb2.com/file/otomadsold/sm28190236.mp4"
-                        type="video/mp4"
-                    />
-                </Player>
+                {videos != undefined && videos.length > 0 ? <Player controls> <source src={videos[0].Location.slice(0, -4)} type="video/mp4" /></Player> : <a>None</a> }
+
             </div>
             <UserList>
                 <h2>Participants</h2>

@@ -19,6 +19,11 @@ My changes are summarized below:
 - added use of the "WatchParty" component to the standard TextChannel
 - changed MessageArea CSS to make room for the new WatchParty component within the text channel
 
+### 11-13-22:
+- added buffer dependency to conv uuid to int (lol, WIP)
+- implemented API and calls for basic interaction with Horahora's RESTful API for most basic watch party operations
+- added form to add videos to video queue (very basic, will change later)
+
 # Revite
 
 ## Description
