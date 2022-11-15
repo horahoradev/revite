@@ -6,6 +6,7 @@ import { animateScroll } from "react-scroll";
 import { Channel } from "revolt.js";
 import styled from "styled-components/macro";
 import useResizeObserver from "use-resize-observer";
+import TextAreaAutoSize from "../../../lib/TextAreaAutoSize";
 
 import { createContext } from "preact";
 import {
@@ -32,42 +33,32 @@ import ConversationStart from "./ConversationStart";
 import MessageRenderer from "./MessageRenderer";
 
 const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-grow: 1;
     min-height: 0;
     word-break: break-word;
-    margin: 5px;
-
-    overflow-x: hidden;
-    overflow-y: hidden;
-
-    &::-webkit-scrollbar-thumb {
-        min-height: 150px;
-    }
-`;
-
-const Player = styled.video`
-    max-height: 100%;
-`;
-
-const UserList = styled.div`
-    margin: 5px;
-    height: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     flex-direction: column;
+
+    textarea {
+        resize: none;
+        padding: 12px;
+        white-space: pre-wrap;
+        font-size: var(--text-size);
+        border-radius: var(--border-radius);
+        background: var(--secondary-header);
+    }
 `;
 
 const VideoList = styled.div`
     margin: 5px;
-    height: 100%;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
 `;
 
+const Player = styled.video`
+    max-width: 100%;
+`;
 const List = styled.ol`
     margin-top: 0px;
 `;
@@ -82,7 +73,6 @@ export const MESSAGE_AREA_PADDING = 82;
 
 export const WatchParty = observer(({ last_id, channel }: Props) => {
     const [videos, setVideos] = useState<Video[]>([]);
-    const [users, setUsers] = useState<User[]>([]);
 
 
             // playing it fast and loose
@@ -110,39 +100,33 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
             if (state.Videos != undefined){
                 setVideos(state.Videos);
             }
-            if (state.Users != undefined) {
-                setUsers(state.Users);
-            }
+
         };
         cb();
     }, [channel]);
 
     const videoItems = videos.map((video) => <li>{video.Title}</li>);
 
-    const userItems = users.map((user) => (
-        <li>
-            {user.IsLeader ? <b>{`${user.UserID} (party leader)`}</b> : user.UserID}
-        </li>
-    ));
-
     return (
         <Area>
-            <VideoList>
-                <h2>Video Queue</h2>
-                <List>{videoItems}</List>
-                <form action={`/api/addvideo/${idNum}`} method="post">
-                    Video name: <input type="text" id="VideoURL" name="VideoURL"/>
-                    <input type="submit" value="Submit" />
-                </form>
-            </VideoList>
-            <div>
                 {videos != undefined && videos.length > 0 ? <Player controls> <source src={videos[0].Location.slice(0, -4)} type="video/mp4" /></Player> : <a>None</a> }
 
-            </div>
-            <UserList>
-                <h2>Participants</h2>
-                <List>{userItems}</List>
-            </UserList>
+                <VideoList>
+                    <List>{videoItems}</List>
+                </VideoList>
+
+                <div>
+                    <TextAreaAutoSize
+                    forceFocus
+                    maxRows={10}
+                    value="Add video"
+                    maxLength={2000}
+                    padding="var(--message-box-padding)" />
+                </div>
+                {/* <form action={`/api/addvideo/${idNum}`} method="post">
+                    <input type="text" id="VideoURL" name="VideoURL"  />
+                    <input type="submit" value="Submit" />
+                </form> */}
         </Area>
     );
 });
@@ -200,7 +184,8 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
 //                     Math.max(
 //                         101,
 //                         ref.current
-//                             ? ref.current.scrollTop +
+//                             ? ref.current.scrollTop +TextArea
+
 //                                   (ref.current.scrollHeight -
 //                                       scrollState.current.previousHeight)
 //                             : 101,

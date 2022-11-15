@@ -24,6 +24,9 @@ My changes are summarized below:
 - implemented API and calls for basic interaction with Horahora's RESTful API for most basic watch party operations
 - added form to add videos to video queue (very basic, will change later)
 
+### 11-14-22:
+- changed UI display on channel page: two columns, one for video embed/queue controls, one for chat
+
 # Revite
 
 ## Description

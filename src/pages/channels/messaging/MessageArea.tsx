@@ -30,18 +30,11 @@ import ConversationStart from "./ConversationStart";
 import MessageRenderer from "./MessageRenderer";
 
 const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
-    flex-grow: 1;
     min-height: 0;
     word-break: break-word;
-
     overflow-x: hidden;
     overflow-y: scroll;
     border-top: 3px;
-    margin-top: 26px;
-
-    &::-webkit-scrollbar-thumb {
-        min-height: 150px;
-    }
 
     > div {
         display: flex;

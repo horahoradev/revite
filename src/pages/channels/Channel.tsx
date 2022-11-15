@@ -37,13 +37,31 @@ const ChannelMain = styled.div.attrs({ "data-component": "channel" })`
     flex-direction: row;
 `;
 
+
+const TextZone = styled.div.attrs({
+    "data-component": "content",
+})`
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+`;
+
 const ChannelContent = styled.div.attrs({
     "data-component": "content",
 })`
-    flex-grow: 1;
     display: flex;
     overflow: hidden;
     flex-direction: column;
+`;
+
+
+const Chat = styled.div.attrs({
+    "data-component": "content",
+})`
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    flex-shrink: 1.5;
 `;
 
 const PlaceholderBase = styled.div`
@@ -194,11 +212,15 @@ const TextChannel = observer(({ channel }: { channel: ChannelI }) => {
                     <ChannelContent>
                         <VoiceHeader id={channel._id} />
                         <NewMessages channel={channel} last_id={lastId} />
-                        <WatchParty channel={channel} last_id={lastId} />
-                        <MessageArea channel={channel} last_id={lastId} />
-                        <TypingIndicator channel={channel} />
-                        <JumpToBottom channel={channel} />
-                        <MessageBox channel={channel} />
+                        <TextZone>
+                            <WatchParty channel={channel} last_id={lastId} />
+                            <Chat>
+                                <MessageArea channel={channel} last_id={lastId} />
+                                <TypingIndicator channel={channel} />
+                                <JumpToBottom channel={channel} />
+                                <MessageBox channel={channel} />
+                            </Chat>
+                        </TextZone>
                     </ChannelContent>
                 </ErrorBoundary>
                 {!isTouchscreenDevice &&

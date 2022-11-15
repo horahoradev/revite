@@ -36,23 +36,18 @@ export async function GetPartyState(PartyID: BigInt): Promise<PartyState> {
     //             UserID: 1,
     //             Name: "Otoman",
     //             IsLeader: true,
-    //         },partystate
+    //         },
     //         {
     //             UserID: 2,
-    //             Name: "RegularUser",
+    //             Name: "Other",
     //             IsLeader: false,
     //         },
     //     ],
     //     Videos: [
     //         {
-    //             Title: "my great video",
+    //             Title: "sm28190236",
     //             ID: 1,
-    //             Location: "here",
-    //         },
-    //         {
-    //             Title: "another video",
-    //             ID: 1,CreateWatch
-    //             Location: "here",
+    //             Location: "https://f002.backblazeb2.com/file/otomadsold/sm28190236.mp4.mpd",
     //         },
     //     ],
     // };
