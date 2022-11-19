@@ -30,6 +30,8 @@ My changes are summarized below:
 ## 11-18-22:
 - expanded Horahora API support, now supporting NextVideo and AddVideo
 - added sockets.io for basic pubsub support, currently correctly logging nextvideo events
+- added "Next" button to select next video, and changed new video text area to respond correctly to input and call the correct API endpoint
+
 
 # Revite
 

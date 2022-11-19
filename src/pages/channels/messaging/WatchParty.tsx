@@ -34,7 +34,9 @@ import ConversationStart from "./ConversationStart";
 import MessageRenderer from "./MessageRenderer";
 
 const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
+    flex-grow: 1;
     min-height: 0;
+    max-width: 70%;
     word-break: break-word;
     display: flex;
     justify-content: space-between;
@@ -55,6 +57,19 @@ const VideoList = styled.div`
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    overflow: scroll;
+`;
+
+const ControlsArea = styled.div`
+    margin: 5px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    width: 100%;
+`;
+
+const NextButton = styled.button`
+    width: 70px;
 `;
 
 const Player = styled.video`
@@ -75,7 +90,7 @@ export const MESSAGE_AREA_PADDING = 82;
 
 export const WatchParty = observer(({ last_id, channel }: Props) => {
             const [videos, setVideos] = useState<Video[]>([]);
-            const [newURL, setNewURL] = useState("");
+            const [newURL, setNewURL] = useState("New video URL");
 
 
             // playing it fast and loose
@@ -87,22 +102,34 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
             const idNum = buf.readUIntBE(0, byteArr.length) % 1000
 
 
+    useEffect(() => {
+        const socket = io("http://localhost", {
+            reconnectionDelayMax: 10000,
+            transports: ["websocket"],
+        });
+
+        socket.on("connect_error", (err) => {
+            console.log(`connect_error due to ${err.message}`);
+        });
+
+        socket.on('event:addvideo', (data) => {
+            // oh no
+            const newItem = [data];
+            setVideos((videos) => videos.concat(newItem));
+          });
+
+          socket.on('event:nextvideo', (data) => {
+            // oh no
+            const newItem = [data];
+            setVideos((videos) => videos.slice(1));
+          });
+
+
+    }, []);
+
 
     useEffect(() => {
         const cb = async function () {
-
-            const socket = io("http://localhost", {
-                reconnectionDelayMax: 10000,
-                transports: ["websocket"],
-            });
-
-            socket.on("connect_error", (err) => {
-                console.log(`connect_error due to ${err.message}`);
-            });
-
-            socket.on('event:nextvideo', (data) => {
-                console.log(data);
-              });
 
             // I'll need to fix this later
             let state = await GetPartyState(BigInt(idNum));
@@ -127,12 +154,13 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
 
     return (
         <Area>
-                {videos != undefined && videos.length > 0 ? <Player controls> <source src={videos[0].Location.slice(0, -4)} type="video/mp4" /></Player> : <a>None</a> }
-
+                {videos != undefined && videos.length > 0 ? <Player key={videos[0].Location.slice(0, -4)} autoPlay controls> <source src={videos[0].Location.slice(0, -4)} type="video/mp4" /></Player> : <a>None</a> }
+                <ControlsArea>
+                    <NextButton onClick={()=> NextVideo(idNum)}>Next</NextButton>
+                </ControlsArea>
                 <VideoList>
                     <List>{videoItems}</List>
                 </VideoList>
-                <button onClick={()=> NextVideo(idNum)}>Next</button>
                 <div>
                     <TextAreaAutoSize
                     forceFocus

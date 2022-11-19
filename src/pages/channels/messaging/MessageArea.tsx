@@ -30,6 +30,7 @@ import ConversationStart from "./ConversationStart";
 import MessageRenderer from "./MessageRenderer";
 
 const Area = styled.div.attrs({ "data-scroll-offset": "with-padding" })`
+    flex-grow: 1;
     min-height: 0;
     word-break: break-word;
     overflow-x: hidden;
