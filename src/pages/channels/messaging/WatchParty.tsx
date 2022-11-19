@@ -7,6 +7,7 @@ import { Channel } from "revolt.js";
 import styled from "styled-components/macro";
 import useResizeObserver from "use-resize-observer";
 import TextAreaAutoSize from "../../../lib/TextAreaAutoSize";
+import io from 'socket.io-client';
 
 import { createContext } from "preact";
 import {
@@ -22,7 +23,7 @@ import { Preloader } from "@revoltchat/ui";
 
 import { defer } from "../../../lib/defer";
 import { internalEmit, internalSubscribe } from "../../../lib/eventEmitter";
-import { GetPartyState, CreateWatchParty, Video, User, JoinParty } from "../../../lib/horahora/api";
+import { AddVideo, GetPartyState, CreateWatchParty, Video, User, JoinParty, NextVideo } from "../../../lib/horahora/api";
 import { getRenderer } from "../../../lib/renderer/Singleton";
 import { ScrollState } from "../../../lib/renderer/types";
 
@@ -71,8 +72,10 @@ interface Props {
 export const MessageAreaWidthContext = createContext(0);
 export const MESSAGE_AREA_PADDING = 82;
 
+
 export const WatchParty = observer(({ last_id, channel }: Props) => {
-    const [videos, setVideos] = useState<Video[]>([]);
+            const [videos, setVideos] = useState<Video[]>([]);
+            const [newURL, setNewURL] = useState("");
 
 
             // playing it fast and loose
@@ -81,11 +84,26 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
             const encoder = new TextEncoder();
             const byteArr = encoder.encode(channel._id);
             const buf = Buffer.from(byteArr);
-            const idNum = buf.readUIntBE(0, byteArr.length) % 1000;
+            const idNum = buf.readUIntBE(0, byteArr.length) % 1000
+
 
 
     useEffect(() => {
         const cb = async function () {
+
+            const socket = io("http://localhost", {
+                reconnectionDelayMax: 10000,
+                transports: ["websocket"],
+            });
+
+            socket.on("connect_error", (err) => {
+                console.log(`connect_error due to ${err.message}`);
+            });
+
+            socket.on('event:nextvideo', (data) => {
+                console.log(data);
+              });
+
             // I'll need to fix this later
             let state = await GetPartyState(BigInt(idNum));
 
@@ -114,12 +132,21 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
                 <VideoList>
                     <List>{videoItems}</List>
                 </VideoList>
-
+                <button onClick={()=> NextVideo(idNum)}>Next</button>
                 <div>
                     <TextAreaAutoSize
                     forceFocus
                     maxRows={10}
-                    value="Add video"
+                    value={newURL}
+                    onChange={(ev) => {
+                        setNewURL(ev.currentTarget.value);
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key == "Enter") {
+                            const wow = () => newURL;
+                            AddVideo(idNum, wow());
+                        }
+                    }}
                     maxLength={2000}
                     padding="var(--message-box-padding)" />
                 </div>
@@ -167,7 +194,10 @@ export const WatchParty = observer(({ last_id, channel }: Props) => {
 //                 setScrollState({
 //                     type: "Bottom",
 //                     scrollingUntil: +new Date() + 150,
-//                 });
+//                 });    const [videos, setVideos] = useState<Video[]>([]);
+    // const [newURL, setNewURL] = useState("");
+
+
 
 //                 animateScroll.scrollToBottom({
 //                     container: ref.current,

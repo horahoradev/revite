@@ -27,6 +27,10 @@ My changes are summarized below:
 ### 11-14-22:
 - changed UI display on channel page: two columns, one for video embed/queue controls, one for chat
 
+## 11-18-22:
+- expanded Horahora API support, now supporting NextVideo and AddVideo
+- added sockets.io for basic pubsub support, currently correctly logging nextvideo events
+
 # Revite
 
 ## Description

@@ -37,7 +37,7 @@ export async function GetPartyState(PartyID: BigInt): Promise<PartyState> {
     //             Name: "Otoman",
     //             IsLeader: true,
     //         },
-    //         {
+    //         {Bu
     //             UserID: 2,
     //             Name: "Other",
     //             IsLeader: false,
@@ -77,6 +77,30 @@ export async function JoinParty(PartyID: number): Promise<boolean> {
     };
 
     await fetch(`http://localhost/api/joinwatchparty/${PartyID}`, options);
+    return true;
+}
+
+export async function NextVideo(PartyID: number): Promise<boolean> {
+    const options = {
+        method: 'POST',
+    };
+
+    await fetch(`http://localhost/api/nextvideo/${PartyID}`, options);
+    return true;
+}
+
+export async function AddVideo(PartyID: number, iURL: string): Promise<boolean> {
+    const options = {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+              VideoURL: iURL,
+          }),
+    };
+
+    await fetch(`http://localhost/api/addvideo/${PartyID}`, options);
     return true;
 }
 
