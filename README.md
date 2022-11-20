@@ -32,6 +32,10 @@ My changes are summarized below:
 - added sockets.io for basic pubsub support, currently correctly logging nextvideo events
 - added "Next" button to select next video, and changed new video text area to respond correctly to input and call the correct API endpoint
 
+## 11-19-22:
+- added support for video embed reloads and real-time video additions/skips
+- altered css to balance width between chat and the watch party component
+- altered display of next button, added watch party controls section
 
 # Revite
 
